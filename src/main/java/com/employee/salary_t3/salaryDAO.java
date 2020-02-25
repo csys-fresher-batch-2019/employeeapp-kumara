@@ -8,5 +8,5 @@ import com.employee.model.salarymodel;
 
 public interface salaryDAO {
 List<salarymodel> tax(int eId) throws SQLException, Exception;
-List<incrementmodel>  increment(int Noofyear)throws SQLException, Exception;;
+List<incrementmodel> increment(double increment, int Noofyear) throws SQLException, Exception;;
 }

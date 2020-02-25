@@ -2,6 +2,7 @@ package com.employee.salary_t3;
 
 import java.sql.Statement;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -50,13 +51,15 @@ try(Connection con=dbconnection.getConnection();
 	}
 
 	@Override
-	public List<incrementmodel> increment(int Noofyear) throws SQLException, Exception {
+	public List<incrementmodel> increment(double increment,int Noofyear) throws SQLException, Exception {
 		
 		List jj= new ArrayList<>();
 		String sql=
-				"SELECT e.department_id,s.salary as old_salary, s.salary + (s.salary * .15) as NewSalary,e.e_id, e.employee_name,(FLOOR((sysdate-joining_date)/365)) as no_of_years from employee_details e	inner join person_salary_details s on e.e_id=s.e_id 	where (FLOOR((sysdate-e.joining_date)/365))>="+Noofyear+"" ;
+				"SELECT e.department_id,s.salary as old_salary, s.salary + (s.salary * "+increment+") as NewSalary,e.e_id, e.employee_name,(FLOOR((sysdate-joining_date)/365)) as no_of_years from employee_details e	inner join person_salary_details s on e.e_id=s.e_id 	where (FLOOR((sysdate-e.joining_date)/365))>="+Noofyear+"" ;
+		System.out.println(sql);
 		try(Connection con=dbconnection.getConnection();
 				Statement k=con.createStatement();
+				
 						ResultSet rs=  k.executeQuery(sql);)
 		{
 			while(rs.next())
@@ -70,7 +73,21 @@ try(Connection con=dbconnection.getConnection();
 				i.setNoofyear(rs.getInt("No_of_years"));
 				jj.add(i);
 					}
-		}
+				String sql1=" update  person_salary_details p  set  p.salary=p.salary + (p.salary * ?)    where exists ( select 1 from  employee_details e where (FLOOR((sysdate-e.joining_date)/365))>=? and e.e_id=p.e_id )";
+			   System.out.println(sql1);
+				try (PreparedStatement pt = con.prepareStatement(sql1);)
+				{  
+					incrementmodel n=new incrementmodel();
+
+					pt.setDouble(1,increment);
+					pt.setInt(2,Noofyear);
+			
+					int row =pt.executeUpdate();
+					System.out.println(row);
+					
+				
+
+					}}
 		
 	
 	catch (Exception e) {
@@ -81,3 +98,5 @@ try(Connection con=dbconnection.getConnection();
 		 return jj;	
 
 	}}
+
+	

@@ -10,7 +10,14 @@ public class incrementmodel {
 	 private int newSalary;
 	 private String  employeeName;
 		private int noofyear;
+		private float increment;
 	
+	public float getIncrement() {
+			return increment;
+		}
+		public void setIncrement(float increment) {
+			this.increment = increment;
+		}
 	public int geteId() {
 		return eId;
 	}
@@ -49,9 +56,10 @@ public class incrementmodel {
 	}
 	
 	 @Override
-		public String toString() {
-			return "incrementmodel [eId=" + eId + ", departmentId=" + departmentId + ", oldSalary=" + oldSalary
-					+ ", newSalary=" + newSalary + ", employeeName=" + employeeName + ", noofyear=" + noofyear + "]";
-		}
+	public String toString() {
+		return "incrementmodel [eId=" + eId + ", departmentId=" + departmentId + ", oldSalary=" + oldSalary
+				+ ", newSalary=" + newSalary + ", employeeName=" + employeeName + ", noofyear=" + noofyear
+				+ ", increment=" + increment + "]";
+	}
 
 }
